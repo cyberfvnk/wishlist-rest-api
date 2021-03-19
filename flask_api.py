@@ -148,4 +148,4 @@ api.add_resource(Obtido, r"/itens/<string:item>/obtido/")
 api.add_resource(Random, r"/itens/random/")
 
 if __name__ == "__main__":
-    app.run(debug=True)
+    app.run()

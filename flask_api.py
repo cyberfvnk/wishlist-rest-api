@@ -2,13 +2,8 @@ from flask import Flask, redirect, url_for
 from flask_restful import Api, Resource, reqparse, abort, fields, marshal_with
 from flask_sqlalchemy import SQLAlchemy
 from sqlalchemy.sql.expression import func
-from dotenv import load_dotenv
 import psycopg2, os
 
-load_dotenv()
-
-import os
-import psycopg2
 
 DATABASE_URL = os.environ['DATABASE_URL']
 

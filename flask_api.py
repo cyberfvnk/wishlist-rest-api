@@ -6,19 +6,10 @@ from dotenv import load_dotenv
 import urllib.parse as up
 import psycopg2, os
 
-
-up.uses_netloc.append("postgres")
-url = up.urlparse(os.environ['DATABASE_URL'])
-conn = psycopg2.connect(database=url.path[1:],
-                        user=url.username,
-                        password=url.password,
-                        host=url.hostname,
-                        port=url.port)
-
 load_dotenv()
 
 up.uses_netloc.append("postgres")
-url = up.urlparse(os.environ['DATABASE_URL'])
+url = up.urlparse(os.environ[DATABASE_URL])
 conn = psycopg2.connect(database=url.path[1:],
                         user=url.username,
                         password=url.password,
@@ -28,7 +19,7 @@ conn = psycopg2.connect(database=url.path[1:],
 app = Flask(__name__)
 api = Api(app)
 
-app.config["SQLALCHEMY_DATABASE_URI"] = os.environ['DATABASE_URL']
+app.config["SQLALCHEMY_DATABASE_URI"] = os.environ[DATABASE_URL]
 
 db = SQLAlchemy(app)
 

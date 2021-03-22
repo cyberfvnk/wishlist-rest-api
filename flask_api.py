@@ -22,8 +22,8 @@ def home():
 
 
 class Wishlist(db.Model):
-    __table_args__ = {"schema":"schema_name"}
-    
+    __tablename__ = 'wishlist'
+
     item = db.Column(db.String(), primary_key=True)
     desc = db.Column(db.String(250))
     link = db.Column(db.String(250))

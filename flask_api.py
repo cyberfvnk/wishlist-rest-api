@@ -16,6 +16,8 @@ app.config["SQLALCHEMY_DATABASE_URI"] = DATABASE_URL
 
 db = SQLAlchemy(app)
 
+db.create_all()
+
 @app.route("/")
 def home():
     return "<h1> HOME PAGE <h1>"

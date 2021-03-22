@@ -16,8 +16,6 @@ app.config["SQLALCHEMY_DATABASE_URI"] = DATABASE_URL
 
 db = SQLAlchemy(app)
 
-db.create_all()
-
 @app.route("/")
 def home():
     return "<h1> HOME PAGE <h1>"
@@ -30,6 +28,8 @@ class Wishlist(db.Model):
     pic = db.Column(db.String(250))
     possui = db.Column(db.Boolean)
 
+db.create_all()
+db.session.commit()
 
 # argumentos do item
 item_put_args = reqparse.RequestParser()

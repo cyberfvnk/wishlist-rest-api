@@ -28,8 +28,6 @@ class Wishlist(db.Model):
     pic = db.Column(db.String(250))
     possui = db.Column(db.Boolean)
 
-db.create_all()
-db.session.commit()
 
 # argumentos do item
 item_put_args = reqparse.RequestParser()

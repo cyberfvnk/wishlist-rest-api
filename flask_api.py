@@ -2,24 +2,17 @@ from flask import Flask, redirect, url_for
 from flask_restful import Api, Resource, reqparse, abort, fields, marshal_with
 from flask_sqlalchemy import SQLAlchemy
 from sqlalchemy.sql.expression import func
-from dotenv import load_dotenv
-import urllib.parse as up
-import psycopg2, os
+import os
+import psycopg2
 
-load_dotenv()
+DATABASE_URL = os.environ['DATABASE_URL']
 
-up.uses_netloc.append("postgres")
-url = up.urlparse(os.environ[DATABASE_URL])
-conn = psycopg2.connect(database=url.path[1:],
-                        user=url.username,
-                        password=url.password,
-                        host=url.hostname,
-                        port=url.port)
+conn = psycopg2.connect(DATABASE_URL, sslmode='require')
 
 app = Flask(__name__)
 api = Api(app)
 
-app.config["SQLALCHEMY_DATABASE_URI"] = os.environ[DATABASE_URL]
+app.config["SQLALCHEMY_DATABASE_URI"] = DATABASE_URL
 
 db = SQLAlchemy(app)
 

@@ -3,3 +3,11 @@
 __pycache__/flask_api.cpython-39.pyc
 __pycache__/flask_api.cpython-38.pyc
 .env
+database.db
+.vscode/settings.json
+.idea/.gitignore
+.idea/misc.xml
+.idea/modules.xml
+.idea/vcs.xml
+.idea/wishlist-api-backend-test.iml
+.idea/inspectionProfiles/profiles_settings.xml

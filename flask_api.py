@@ -1,24 +1,25 @@
-from flask import Flask, redirect, url_for
+from flask import Flask, redirect, url_for, render_template, request, session
 from flask_restful import Api, Resource, reqparse, abort, fields, marshal_with
 from flask_sqlalchemy import SQLAlchemy
 from sqlalchemy.sql.expression import func
-import psycopg2, os
+import psycopg2, os, requests
 
 
 DATABASE_URL = os.environ['DATABASE_URL']
+DATABASE_USER = os.environ['DATABASE_USER']
+APP_SECRET_KEY = os.environ['APP_SECRET_KEY']
+BASE_URL = r"http://127.0.0.1:5000/"
 
 conn = psycopg2.connect(DATABASE_URL, sslmode='require')
 
 app = Flask(__name__)
 api = Api(app)
+app.secret_key = APP_SECRET_KEY
 
 app.config["SQLALCHEMY_DATABASE_URI"] = DATABASE_URL
+app.config["SQLALCHEMY_TRACK_MODIFICATIONS"] = False
 
 db = SQLAlchemy(app)
-
-@app.route("/")
-def home():
-    return "<h1> HOME PAGE <h1>"
 
 
 class Wishlist(db.Model):
@@ -48,19 +49,6 @@ resource_fields = {"item": fields.String,
                    "link": fields.String,
                    "pic": fields.String,
                    "possui":fields.Boolean}
-
-
-class Lista(Resource):
-
-    @marshal_with(resource_fields) 
-    def get(self):
-        args = item_put_args.parse_args()
-        output = Wishlist.query.all()
-
-        if not output:
-            abort(404, message="Não há itens na lista.")
-
-        return output, 200
 
 
 class Item(Resource):
@@ -121,7 +109,12 @@ class Item(Resource):
         return "", 204
 
 
-class Obtido(Resource):
+class Owned(Resource):
+
+    @marshal_with(resource_fields)
+    def get(self,item):
+        response = requests.patch(BASE_URL + "wishlist/" + item + "/owned/")
+
 
     @marshal_with(resource_fields)
     def patch(self,item):
@@ -132,8 +125,6 @@ class Obtido(Resource):
 
         output.possui = not output.possui
         db.session.commit()
-
-        return output, 200
 
 
 class Random(Resource): 
@@ -148,10 +139,73 @@ class Random(Resource):
         return output, 200
 
 
-api.add_resource(Lista, r"/itens/")
-api.add_resource(Item, r"/itens/<string:item>/")
-api.add_resource(Obtido, r"/itens/<string:item>/obtido/")
-api.add_resource(Random, r"/itens/random/")
+
+@app.route("/")
+def home():
+    return render_template("index.html")
+
+@app.route("/login", methods =["POST", "GET"])
+def login():
+    if request.method == "POST":
+        password = request.form["pwd"]
+
+        if password in DATABASE_USER:
+            user = "Admin"
+
+        session["user"] = user
+        return redirect(url_for("wishlist"))
+    else:
+        if "user" in session:
+            return redirect(url_for("wishlist"))
+        return render_template("login.html")
+
+@app.route("/logout")
+def logout():
+    session.pop("user", None)
+    return redirect(url_for("home"))
+
+@app.route("/wishlist", methods =["POST", "GET", "PATCH"])
+def wishlist():
+
+    if "user" in session:
+        user = session["user"]
+
+        if request.method == "POST":
+            item = request.form["item"]
+            desc = request.form["desc"]
+            link = request.form["link"]
+            pic = request.form["pic"]
+            
+            data = {item: {"desc": desc,
+                            "link": link, 
+                            "pic": pic}}
+
+            action = request.form["btnradio"]
+            
+            if action == "edit":
+                response = requests.patch(BASE_URL + "wishlist/" + item, data[item])
+                # print(BASE_URL + "wishlist/" + item, data[item])     
+            elif action == "delete":
+                response = requests.delete(BASE_URL + "wishlist/" + item)
+            elif action == "status":
+                response = requests.patch(BASE_URL + "/wishlist/" + item + "/owned/")
+            else:
+                response = requests.put(BASE_URL + "wishlist/" + item, data[item])
+   
+        return render_template("wishlist.html",
+                            lista_all=enumerate(Wishlist.query.filter_by(possui=False).all()), 
+                            lista_owned=enumerate(Wishlist.query.filter_by(possui=True).all()), 
+                            URL_want=[BASE_URL+ "wishlist/" + i.item for i in Wishlist.query.filter_by(possui=False).all()], 
+                            URL_own=[BASE_URL+ "wishlist/" + i.item for i in Wishlist.query.filter_by(possui=True).all()])
+    else:
+        return redirect(url_for("login"))
+
+
+
+api.add_resource(Item, r"/wishlist/<string:item>")
+api.add_resource(Owned, r"/wishlist/<string:item>/owned/")
+api.add_resource(Random, r"/wishlist/random/")
 
 if __name__ == "__main__":
-    app.run()
+    db.create_all()
+    app.run(debug=True)

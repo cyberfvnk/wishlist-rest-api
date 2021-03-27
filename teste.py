@@ -2,14 +2,15 @@ import requests
 
 BASE = r"http://127.0.0.1:5000/"
 
-# data = [{"queijo":{"desc": "pacote de queijo embalado individualmente", "link": "blablabla"}},
-#         {"sweater":{"desc": "sweater da jingolas"}},
-#         {"coleira":{"desc": "coleirinha pro cachorro esquisito da olivia"}}]
+data = [{"queijo":{"desc": "pacote de queijo embalado individualmente", "link": "blablabla"}},
+        {"sweater":{"desc": "sweater da jingolas"}},
+        {"coleira":{"desc": "coleirinha pro cachorro esquisito da olivia"}}]
 
-# for i,item in enumerate(data):
-#     for j in item:
-#         response = requests.put(BASE + "itens/" + j, data[i][j])
-#         print(response.json())
+for i,item in enumerate(data):
+    for j in item:
+        response = requests.put(BASE + "itens/" + j, data[i][j])
+        # print(response.json())
+        print(BASE + "itens/" + j, data[i][j])
 
 # input()
 

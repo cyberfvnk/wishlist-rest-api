@@ -8,8 +8,8 @@ import psycopg2, os, requests
 DATABASE_URL = os.environ['DATABASE_URL']
 DATABASE_USER = os.environ['DATABASE_USER']
 APP_SECRET_KEY = os.environ['APP_SECRET_KEY']
-BASE_URL = r"http://127.0.0.1:5000/"
-
+BASE_URL = os.environ['BASE_URL']
+ 
 conn = psycopg2.connect(DATABASE_URL, sslmode='require')
 
 app = Flask(__name__)
@@ -188,15 +188,15 @@ def wishlist():
             elif action == "delete":
                 response = requests.delete(BASE_URL + "wishlist/" + item)
             elif action == "status":
-                response = requests.patch(BASE_URL + "/wishlist/" + item + "/owned/")
+                response = requests.patch(BASE_URL + "wishlist/" + item + "/owned/")
             else:
                 response = requests.put(BASE_URL + "wishlist/" + item, data[item])
    
         return render_template("wishlist.html",
                             lista_all=enumerate(Wishlist.query.filter_by(possui=False).all()), 
                             lista_owned=enumerate(Wishlist.query.filter_by(possui=True).all()), 
-                            URL_want=[BASE_URL+ "wishlist/" + i.item for i in Wishlist.query.filter_by(possui=False).all()], 
-                            URL_own=[BASE_URL+ "wishlist/" + i.item for i in Wishlist.query.filter_by(possui=True).all()])
+                            URL_want=["/wishlist/" + i.item for i in Wishlist.query.filter_by(possui=False).all()], 
+                            URL_own=["/wishlist/" + i.item for i in Wishlist.query.filter_by(possui=True).all()])
     else:
         return redirect(url_for("login"))
 

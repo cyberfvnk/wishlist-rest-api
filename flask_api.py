@@ -74,7 +74,7 @@ class Item(Resource):
 
         if wishlist_item: 
             # checa se o item já existe na lista
-            abort(409, message="O item inserido já existe.")
+            abort(409, message="This item already exists.")
 
         # cria o objeto item
         item = Wishlist(item=item, desc=args["desc"], link=args["link"], pic=args["pic"], possui=False)
@@ -94,7 +94,7 @@ class Item(Resource):
 
         if not wishlist_item:
             # checa se o item existe
-            abort(404, message="Item não encontrado.")
+            abort(404, message="Item not found.")
 
         # atualiza os argumentos caso existam alterações
         if args["desc"]:
@@ -116,7 +116,7 @@ class Item(Resource):
 
         if not wishlist_item:
             # checa se o item existe
-            abort(404, message="Item não encontrado.")
+            abort(404, message="Item not found.")
 
         db.session.delete(wishlist_item)
         db.session.commit()
@@ -137,7 +137,7 @@ class Owned(Resource):
 
         if not wishlist_item:
             # checa se o item existe
-            abort(404, message="Item não encontrado.")
+            abort(404, message="Item not found.")
 
         wishlist_item.possui = not wishlist_item.possui
         db.session.commit()
@@ -152,7 +152,7 @@ class Random(Resource):
 
         if not wishlist_item:
             # checa se há itens disponíveis na lista
-            abort(404, message="Não há itens disponíveis na lista.")
+            abort(404, message="There's no available items in the wishlist.")
 
         return wishlist_item, 200
 

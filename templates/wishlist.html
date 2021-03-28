@@ -1,56 +1,68 @@
+<!doctype html>
 {% extends "base.html" %}
 
 {% block title %} Wishlist {% endblock %}
 
-    {% block content %}
-        <div class="row justify-content-start">
-            <div class="col-4">
-                <form action="#" method="POST">
-                    <h5>Choose an action:</h5>
-                        <div class="btn-group-sm" role="group" aria-label="Basic radio toggle button group">
-                            <input type="radio" class="btn-check" name="btnradio" id="btn_add" autocomplete="off" value="add" checked>
-                            <label class="btn btn-outline-dark" for="btn_add">Add</label>
-                        
-                            <input type="radio" class="btn-check" name="btnradio" id="btn_edit" autocomplete="off" value="edit" >
-                            <label class="btn btn-outline-dark" for="btn_edit">Edit</label>
-                        
-                            <input type="radio" class="btn-check" name="btnradio" id="btn_del" autocomplete="off" value="delete" >
-                            <label class="btn btn-outline-danger" for="btn_del">Delete</label>
+{% block content %}
+  <div class="row justify-content-start">
+    <!-- COLUNA DA ESQUEDA -->
+    <div class="col-4">
+      <form action="#" method="POST">
+        <h5>Choose an action:</h5>
+          <!-- BOTÕES QUE DEFINEM A AÇÃO A SER REALIZADA -->
+          <div class="btn-group-sm" role="group" aria-label="Basic radio toggle button group">
+            <input type="radio" class="btn-check" name="btnradio" id="btn_add" autocomplete="off" value="add" checked>
+            <label class="btn btn-outline-dark" for="btn_add">Add</label>
+            
+            <input type="radio" class="btn-check" name="btnradio" id="btn_edit" autocomplete="off" value="edit" >
+            <label class="btn btn-outline-dark" for="btn_edit">Edit</label>
+            
+            <input type="radio" class="btn-check" name="btnradio" id="btn_del" autocomplete="off" value="delete" >
+            <label class="btn btn-outline-danger" for="btn_del">Delete</label>
 
-                            <input type="radio" class="btn-check" name="btnradio" id="btn_status" autocomplete="off" value="status" >
-                            <label class="btn btn-outline-success" for="btn_status">Toggle Status</label>
-                        </div>
-                    <p></p>
-                    <p>Item:</p>
-                    <p><input type="text" name="item" placeholder="Enter item" value ="{{item if item}}"></p>  
-                    <p>Description (optional):</p>
-                    <p><input type="text" name="desc" placeholder="Enter description" value ="{{desc if desc}}"></p>  
-                    <p>URL (optional):</p>
-                    <p><input type="url" name="link" placeholder="Enter URL" value =""></p>  
-                    <p><div class="mb-3">
-                        <label for="formFileSm" class="form-label">Picture (optional):</label>
-                        <input class="form-control form-control-sm" name="pic" id="formFileSm" type="file" accept="image/*">
-                    </div></p>
-                    <p><input type="submit" class="btn btn-success btn-sm" value=Submit></p>
-                </form>
-            </div>
-            <div class="col-4">
-                <p></p>
-                <a class="btn btn-outline-dark btn-sm" href="http://127.0.0.1:5000/wishlist/random/" role="button">Get Random Item</a>
-                <p></p>
-                <h5>Items on Wishlist:</h5>
-                {% for i in lista_all %}             
-                    <p>- <a href={{URL_want[i[0]].replace(" ", "%20")}}>{{i[1]["item"]}}</a></p>
-                {% endfor %}
-            </div>
-            <div class="col-4">
-                <p></p>
-                <h5>Already Owned:</h5>
-                {% for i in lista_owned %}             
-                    <p>- <a href={{URL_own[i[0]].replace(" ", "%20")}}>{{i[1]["item"]}}</a></p>
-                {% endfor %}
+            <input type="radio" class="btn-check" name="btnradio" id="btn_status" autocomplete="off" value="status" >
+            <label class="btn btn-outline-success" for="btn_status">Toggle Status</label>
+          </div>            
+        <p></p>
+        <!-- ITEM E ARGUMENTOS A RECEBEREM A AÇÃO ESCOLHIDA -->
+        <p>Item:</p>
+        <p><input type="text" name="item" placeholder="Enter item" value ="{{item if item}}"></p>  
 
-            </div>
-        </div>
-    {% endblock %}
-    
+        <p>Description (optional):</p>
+        <p><input type="text" name="desc" placeholder="Enter description" value ="{{desc if desc}}"></p> 
+
+        <p>URL (optional):</p>
+        <p><input type="url" name="link" placeholder="Enter URL" value =""></p>  
+
+        <p><div class="mb-3">
+          <label for="formFileSm" class="form-label">Picture (optional):</label>
+          <input class="form-control form-control-sm" name="pic" id="formFileSm" type="file" accept="image/*">
+        </div></p>
+        <!-- REALIZA O MÉTODO POST E ENVIA OS DADOS QUE SERÃO USADOS PELA API -->
+        <p><input type="submit" class="btn btn-success btn-sm" value=Submit></p>
+      </form>
+    </div>    
+    <!-- COLUNA DO MEIO -->
+    <div class="col-4">
+      <p></p>
+      <!-- ACESSA O ENDPOINT QUE RETORNA UM ITEM ALEATÓRIO DA LISTA -->
+      <a class="btn btn-outline-dark btn-sm" href="/wishlist/random/" role="button">Get Random Item</a>
+      <p></p>
+      <!-- ITENS DA LISTA MARCADOS COMO NÃO OBTIDOS, COM LINK PARA UM ENDPOINT QUE RETORNA O ITEM -->
+      <h5>Items on Wishlist:</h5>
+      {% for i in lista_all %}       
+        <p>- <a href={{URL_want[i[0]].replace(" ", "%20")}}>{{i[1]["item"]}}</a></p>
+      {% endfor %}
+    </div>
+    <!-- COLUNA DA DIREITA -->
+    <div class="col-4">
+      <p></p>
+      <!-- ITENS DA LISTA MARCADOS COMO OBTIDOS, COM LINK PARA UM ENDPOINT QUE RETORNA O ITEM -->
+      <h5>Already Owned:</h5>
+      {% for i in lista_owned %}       
+        <p>- <a href={{URL_own[i[0]].replace(" ", "%20")}}>{{i[1]["item"]}}</a></p>
+      {% endfor %}
+    </div>
+  </div>
+{% endblock %}
+  

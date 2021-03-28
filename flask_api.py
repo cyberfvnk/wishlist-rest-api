@@ -142,6 +142,8 @@ class Owned(Resource):
         wishlist_item.possui = not wishlist_item.possui
         db.session.commit()
 
+        return wishlist_item, 200
+
 
 class Random(Resource):
 

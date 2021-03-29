@@ -253,7 +253,7 @@ api.add_resource(Owned, r"/wishlist/<string:item>/owned/")
 api.add_resource(Random, r"/wishlist/random/")
 
 
-# roda o app
+# roda o app em modo de depuração
 if __name__ == "__main__":
     db.create_all()
-    app.run(debug=True)
+    app.run()

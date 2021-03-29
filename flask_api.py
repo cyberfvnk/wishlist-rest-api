@@ -164,6 +164,11 @@ def home():
     # template para a tela inicial
     return render_template("index.html")
 
+@app.route("/documentation")
+def documentation():
+    # template para a documentação
+    return render_template("documentation.html")
+
 
 @app.route("/login", methods=["POST", "GET"])
 def login():
@@ -246,4 +251,4 @@ api.add_resource(Random, r"/wishlist/random/")
 # roda o app
 if __name__ == "__main__":
     db.create_all()
-    app.run()
+    app.run(debug=True)

@@ -2,7 +2,7 @@ import os
 import requests
 import time
 
-BASE_URL = r'http://127.0.0.1:5000/'
+BASE_URL = r'https://wishlist-flask-api.herokuapp.com/'
 
 def tempo_decorrido(f):
     def wrapper():
@@ -11,14 +11,8 @@ def tempo_decorrido(f):
         t1 = time.time()
 
         t = t1 - t0
-        t_ideal = 0.25
-
-        if t <= t_ideal:
-            resultado = "Tempo OK"
-        else:
-            resultado = "Tempo FAIL"
-
-        print(f"\nTempo decorrido: {t:.3f} segundos. \nTempo esperado: 0.200 segundos \nResultado: {resultado}")
+ 
+        print(f"\nTempo decorrido: {t:.3f} segundos. \n")
     return wrapper
 
 
@@ -96,10 +90,10 @@ def teste_api():
     TESTE PATCH 
     """
     print("Teste 4: Altera a descrição de 3 itens que existem na lista \n \nStatus esperado: 200 (sucesso)")
-    put_itens()
+    patch_itens()
     print("----------------------------------------------")
     print("Teste 5: Altera o status de 3 itens que existem na lista \n \nStatus esperado: 200 (sucesso)")
-    put_itens()
+    patch_status()
     print("----------------------------------------------")
     """ 
     TESTE GET 
@@ -126,17 +120,12 @@ def teste_api():
     TESTE PATCH 
     """
     print("Teste 10: Altera a descrição de 3 itens que não existem na lista \n \nStatus esperado: 404 (item não encontrado)")
-    put_itens()
+    patch_itens()
     print("----------------------------------------------")
     print("Teste 11: Altera o status de 3 itens que não existem na lista \n \nStatus esperado: 404 (item não encontrado)")
-    put_itens()
+    patch_status()
     print("----------------------------------------------")
     t1 = time.time()
     t = t1 - t0
-    t_ideal = 0.25*11
-    if t <= t_ideal:
-        resultado = "Tempo OK"
-    else:
-        resultado = "Tempo FAIL"
-
-    print(f"\nTestes realizados: 11 \nTempo decorrido: {t:.3f} segundos. \nTempo esperado: {t_ideal} segundos \nResultado: {resultado}")
+    t_ideal = 0.25*3*11
+    print(f"\nTestes realizados: 11 \nTempo decorrido: {t:.3f} segundos.")

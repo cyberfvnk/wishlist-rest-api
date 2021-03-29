@@ -236,10 +236,12 @@ def wishlist():
     else:
         return redirect(url_for("login")) # redireciona para login caso não haja sessão
 
+
 #rotas da api
 api.add_resource(Item, r"/wishlist/<string:item>")
 api.add_resource(Owned, r"/wishlist/<string:item>/owned/")
 api.add_resource(Random, r"/wishlist/random/")
+
 
 # roda o app
 if __name__ == "__main__":

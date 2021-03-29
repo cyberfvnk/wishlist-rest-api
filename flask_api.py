@@ -200,7 +200,6 @@ def logout():
 def wishlist():
     if "user" in session:
         #checa se há sessão iniciada
-        user = session["user"]
 
         if request.method == "POST":
 

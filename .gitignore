@@ -13,3 +13,6 @@ database.db
 .idea/inspectionProfiles/profiles_settings.xml
 teste.py
 database.db
+__pycache__/api.cpython-38.pyc
+__pycache__/methods.cpython-38.pyc
+__pycache__/testes_func.cpython-38.pyc

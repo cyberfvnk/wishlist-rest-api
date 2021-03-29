@@ -167,7 +167,12 @@ def home():
 @app.route("/documentation")
 def documentation():
     # template para a documentação
-    return render_template("documentation.html")
+    if "user" in session:
+        #checa se há sessão iniciada
+        return render_template("documentation.html")
+    else:
+        return redirect(url_for("login")) # redireciona para login caso não haja sessão
+    
 
 
 @app.route("/login", methods=["POST", "GET"])
